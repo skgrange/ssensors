@@ -462,7 +462,10 @@ import_raster_objects <- function(con, tz = "UTC") {
             date,
             variable) %>% 
     mutate(observations = list(threadr::unserialise_r_object(observations, "gzip")),
-           raster = list(threadr::unserialise_r_object(raster, "gzip")))
+           raster = list(threadr::unserialise_r_object(raster, "gzip")),
+           n_observations = nrow(observations)) %>% 
+    relocate(n_observations,
+             .before = observations)
   
   return(df)  
 }

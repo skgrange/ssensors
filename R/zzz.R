@@ -10,7 +10,7 @@ if (getRversion() >= "2.15.1") {
     "description", "model", "observations", "period_exclude", "period_valid", 
     "process", "raster", "sampling_point_id", "sensing_element_id", 
     "sensor_group", "sensor_id", "sensor_type", "site", "site_name", 
-    "valid", "variable", "variable_predict"
+    "valid", "variable", "variable_predict", "n_observations"
   )
   
   # Squash the notes
