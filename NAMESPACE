@@ -2,9 +2,9 @@
 
 export("%>%")
 export(import_calibration_coefficients)
-export(import_calibration_summaries)
 export(import_cylinder_deployments)
 export(import_cylinder_exclusion_periods)
+export(import_cylinder_test_summaries)
 export(import_invalid_date_ranges)
 export(import_model_objects)
 export(import_observation_flags)

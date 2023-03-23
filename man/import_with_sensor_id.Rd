@@ -5,7 +5,7 @@
 \alias{import_reference_cylinders}
 \alias{import_cylinder_deployments}
 \alias{import_observations_calibrations}
-\alias{import_calibration_summaries}
+\alias{import_cylinder_test_summaries}
 \alias{import_sensor_deployments}
 \alias{import_calibration_coefficients}
 \alias{import_sensing_elements}
@@ -37,7 +37,7 @@ import_cylinder_deployments(con, tz = "UTC")
 
 import_observations_calibrations(con, tz = "UTC")
 
-import_calibration_summaries(con, tz = "UTC")
+import_cylinder_test_summaries(con, tz = "UTC")
 
 import_sensor_deployments(con, tz = "UTC")
 

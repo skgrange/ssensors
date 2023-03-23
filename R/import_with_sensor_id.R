@@ -180,14 +180,16 @@ import_observations_calibrations <- function(con, tz = "UTC") {
 
 #' @rdname import_with_sensor_id
 #' @export
-import_calibration_summaries <- function(con, tz = "UTC") {
+import_cylinder_test_summaries <- function(con, tz = "UTC") {
   
-  stopifnot(databaser::db_table_exists(con, "calibration_summaries"))
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "cylinder_test_summaries"))
   
+  # Get data and format some data-types
   databaser::db_get(
     con,
     "SELECT *
-    FROM calibration_summaries
+    FROM cylinder_test_summaries
     ORDER BY sensor_id,
     variable,
     date_start,
@@ -451,14 +453,15 @@ import_raster_objects <- function(con, tz = "UTC") {
     con,
     "SELECT * 
     FROM raster_objects
-    ORDER BY date,
+    ORDER BY data_source,
+    date,
     variable"
   ) %>% 
     mutate(date = threadr::parse_unix_time(date, tz = tz))
   
   # Parse the raw vectors/blobs into R objects
   df <- df %>% 
-    rowwise(description,
+    rowwise(data_source,
             date,
             variable) %>% 
     mutate(observations = list(threadr::unserialise_r_object(observations, "gzip")),
@@ -467,5 +470,6 @@ import_raster_objects <- function(con, tz = "UTC") {
     relocate(n_observations,
              .before = observations)
   
-  return(df)  
+  return(df)
+  
 }
