@@ -128,7 +128,7 @@ import_cylinder_deployments <- function(con, tz = "UTC") {
     LEFT JOIN sensors
     ON deployments_cylinders.sensor_id = sensors.sensor_id
     ORDER BY sensor_id,
-    cylinder_id"
+    date_start"
   ) %>% 
     mutate(
       across(
