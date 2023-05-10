@@ -17,6 +17,7 @@
 \alias{import_validity_types}
 \alias{import_model_objects}
 \alias{import_raster_objects}
+\alias{import_observation_flagging_conditions}
 \title{Functions to import data from an extended sensors \strong{smonitor} database.}
 \usage{
 import_with_sensor_id(
@@ -60,6 +61,8 @@ import_validity_types(con)
 import_model_objects(con, add_extras = TRUE)
 
 import_raster_objects(con, tz = "UTC")
+
+import_observation_flagging_conditions(con)
 }
 \arguments{
 \item{con}{Database connection to an sensors \strong{smonitor} database.}

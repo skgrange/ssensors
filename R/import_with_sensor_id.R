@@ -473,3 +473,31 @@ import_raster_objects <- function(con, tz = "UTC") {
   return(df)
   
 }
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_observation_flagging_conditions <- function(con) {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "observation_flagging_conditions"))
+  
+  databaser::db_get(
+    con,
+    "SELECT observation_flagging_conditions.*,
+    sites.site_name
+    FROM observation_flagging_conditions
+    LEFT JOIN sites
+    ON observation_flagging_conditions.site = sites.site
+    ORDER BY site,
+    variable"
+  ) %>% 
+    relocate(site_name,
+             .after = site) %>% 
+    mutate(ws_range = ws_max - ws_min,
+           wd_range = wd_max - wd_min) %>% 
+    relocate(ws_range,
+             wd_range,
+             .after = wd_max)
+  
+}
