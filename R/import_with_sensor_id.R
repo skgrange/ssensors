@@ -360,7 +360,10 @@ import_sensor_types <- function(con) {
   databaser::db_get(
     con,
     "SELECT * 
-    FROM sensor_types"
+    FROM sensor_types
+    ORDER by primary_purpose,
+    sensor_group,
+    sensor_type"
   )
   
 }
