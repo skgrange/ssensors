@@ -41,17 +41,16 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   # Check if the extra tables exists
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
   
-  # Get sensor id from `processes`
+  # Get extra sensor things from `processes`
   df_sensor_ids <- glue::glue(
     "SELECT processes.process,
     processes.sensor_id,
     processes.sensing_element_id,
-    sensors.sensor_type,
-    processes.sampling_point_id
+    sensors.sensor_type
     FROM processes 
     LEFT JOIN sensors 
     ON processes.sensor_id = sensors.sensor_id
-    WHERE process IN (", stringr::str_c(process, collapse = ","), ")"
+    WHERE process IN ({stringr::str_c(process, collapse = ',')})"
   ) %>% 
     databaser::db_get(con, .)
   
@@ -75,11 +74,10 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   
   # Join extras to observations
   df <- df %>% 
-    left_join(df_sensor_ids, by = "process") %>% 
+    left_join(df_sensor_ids, by = join_by(process)) %>% 
     relocate(sensor_id,
              sensing_element_id,
              sensor_type,
-             sampling_point_id,
              .after = variable)
   
   return(df)
