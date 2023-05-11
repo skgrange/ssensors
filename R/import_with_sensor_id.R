@@ -198,8 +198,16 @@ import_cylinder_test_summaries <- function(con, tz = "UTC") {
         c(date_start, date_end), 
         ~threadr::parse_unix_time(as.numeric(.), tz = tz)
       ),
+      duration = threadr::parse_time(duration),
       across(c(period_exclude, period_valid), as.logical)
-    )
+    ) %>% 
+    group_by(sensor_id,
+             sensing_element_id,
+             inlet,
+             variable) %>% 
+    mutate(date_start_delta = threadr::lag_delta(as.numeric(date_start))) %>% 
+    ungroup() %>% 
+    mutate(date_start_delta = threadr::parse_time(date_start_delta))
   
 }
 

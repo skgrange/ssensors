@@ -2,7 +2,7 @@ Package: ssensors
 Type: Package
 Title: A Collection of Functions to Extend the smonitor Data Model for Sensor
     Networks
-Version: 0.0.008
+Version: 0.0.009
 Date: 2023-05-11
 Authors@R: person("Stuart K.", "Grange", email = "s.k.grange@gmail.com", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-4093-3596"))
