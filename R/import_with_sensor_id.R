@@ -510,3 +510,22 @@ import_observation_flagging_conditions <- function(con) {
              .after = wd_max)
   
 }
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_generic_observations <- function(con, tz = "UTC") {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "generic_observations"))
+  
+  # Query database
+  databaser::db_get(
+    con, 
+    "SELECT * 
+    FROM generic_observations
+    ORDER BY date"
+  ) %>% 
+    mutate(date = threadr::parse_unix_time(date, tz = tz))
+  
+}
