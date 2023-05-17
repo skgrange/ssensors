@@ -29,9 +29,10 @@
 #' @return Tibble. 
 #' 
 #' @export
-import_sites_met <- function(con, site, summary = 1L, start = 1969, end = NA,
-                             variables = c("air_temp", "rh", "wd", "ws"),
-                             valid_only = FALSE, tz = "UTC") {
+import_meteorological_data_by_site <- function(con, site, summary = 1L, 
+                                               start = 1969, end = NA,
+                                               variables = c("air_temp", "rh", "wd", "ws"),
+                                               valid_only = FALSE, tz = "UTC") {
   
   # Get sites table
   df_sites <- smonitor::import_sites(con)
