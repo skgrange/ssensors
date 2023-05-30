@@ -529,3 +529,21 @@ import_generic_observations <- function(con, tz = "UTC") {
     mutate(date = threadr::parse_unix_time(date, tz = tz))
   
 }
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_icos_cities_variables <- function(con) {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "icos_cities_variables"))
+  
+  # Get all data
+  databaser::db_get(
+    con, 
+    "SELECT * 
+    FROM icos_cities_variables
+    ORDER BY variable"
+  )
+  
+}

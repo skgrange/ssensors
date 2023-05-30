@@ -19,6 +19,7 @@
 \alias{import_raster_objects}
 \alias{import_observation_flagging_conditions}
 \alias{import_generic_observations}
+\alias{import_icos_cities_variables}
 \title{Functions to import data from an extended sensors \strong{smonitor} database.}
 \usage{
 import_with_sensor_id(
@@ -66,6 +67,8 @@ import_raster_objects(con, tz = "UTC")
 import_observation_flagging_conditions(con)
 
 import_generic_observations(con, tz = "UTC")
+
+import_icos_cities_variables(con)
 }
 \arguments{
 \item{con}{Database connection to an sensors \strong{smonitor} database.}
