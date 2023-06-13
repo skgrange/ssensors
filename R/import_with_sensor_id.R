@@ -132,10 +132,13 @@ import_cylinder_deployments <- function(con, tz = "UTC") {
       across(
         c(date_start, date_end), 
         ~threadr::parse_unix_time(as.numeric(.), tz = tz)
-      )
+      ),
+      interval = lubridate::interval(date_start, date_end)
     ) %>% 
     relocate(sensor_id,
-             sensor_type)
+             sensor_type) %>% 
+    relocate(interval,
+             .after = date_end)
   
 }
 
@@ -234,12 +237,16 @@ import_sensor_deployments <- function(con, tz = "UTC") {
     mutate(
       across(
         c(date_start, date_end),
-        ~threadr::parse_unix_time(as.numeric(., tz = tz)))
+        ~threadr::parse_unix_time(as.numeric(., tz = tz))
+      ),
+      interval = lubridate::interval(date_start, date_end)
     ) %>% 
     relocate(sensor_id,
              sensor_type,
              site,
-             site_name)
+             site_name) %>% 
+    relocate(interval,
+             .after = date_end)
   
 }
 
