@@ -21,7 +21,14 @@
 #' @param site_name Should the return include the \code{site_name} variable? 
 #' Default is \code{TRUE}. 
 #' 
-#' @param valid_only Should invalid observations be filtered out? 
+#' @param valid_only Should invalid observations be filtered out? Default is 
+#' \code{TRUE}. Valid observations are considered to be those with the validity
+#' variable being \code{1} or missing (\code{NULL} or \code{NA}). This argument
+#' will be set to \code{FALSE} if \code{set_invalid_values} is used.
+#' 
+#' @param set_invalid_values Should invalid observations be set to \code{NA}? 
+#' See \code{\link{set_invalid_values}} for details and this argument will set
+#' the \code{valid_only} argument to \code{FALSE}. 
 #' 
 #' @param warn Should the functions raise warnings? 
 #' 
@@ -36,7 +43,8 @@
 #' @export
 import_with_sensor_id <- function(con, process, summary = NA, start = 1969, 
                                   end = NA, site_name = TRUE, valid_only = FALSE, 
-                                  warn = FALSE, tz = "UTC") {
+                                  set_invalid_values = FALSE, warn = FALSE, 
+                                  tz = "UTC") {
   
   # Check if the extra tables exists
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
@@ -63,6 +71,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
     end = end,
     site_name = site_name,
     valid_only = valid_only,
+    set_invalid_values = set_invalid_values,
     warn = warn,
     tz = tz
   )

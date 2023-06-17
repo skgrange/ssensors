@@ -30,6 +30,7 @@ import_with_sensor_id(
   end = NA,
   site_name = TRUE,
   valid_only = FALSE,
+  set_invalid_values = FALSE,
   warn = FALSE,
   tz = "UTC"
 )
@@ -90,7 +91,14 @@ will be ceiling-rounded.}
 \item{site_name}{Should the return include the \code{site_name} variable? 
 Default is \code{TRUE}.}
 
-\item{valid_only}{Should invalid observations be filtered out?}
+\item{valid_only}{Should invalid observations be filtered out? Default is 
+\code{TRUE}. Valid observations are considered to be those with the validity
+variable being \code{1} or missing (\code{NULL} or \code{NA}). This argument
+will be set to \code{FALSE} if \code{set_invalid_values} is used.}
+
+\item{set_invalid_values}{Should invalid observations be set to \code{NA}? 
+See \code{\link{set_invalid_values}} for details and this argument will set
+the \code{valid_only} argument to \code{FALSE}.}
 
 \item{warn}{Should the functions raise warnings?}
 
