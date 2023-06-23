@@ -4,7 +4,9 @@
 #' 
 #' @param con Database connection to an sensors \strong{smonitor} database. 
 #' 
-#' @param process A vector of processes. 
+#' @param process A vector of processes. If a data frame/tibble is passed 
+#' containing a variable called \code{process}, this vector will be extracted 
+#' and used. 
 #' 
 #' @param summary A vector of summaries. 
 #' 
@@ -46,8 +48,14 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
                                   set_invalid_values = FALSE, warn = FALSE, 
                                   tz = "UTC") {
   
-  # Check if the extra tables exists
+  # Check if the extra ssensors data model tables exist
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
+  
+  # If a data frame has been passed for the progress argument, pull the process
+  # variable if it exists, the naming is not very helpful here! 
+  if (is.data.frame(process) & "process" %in% names(process)) {
+    process <- pull(process, process)
+  }
   
   # Get extra sensor things from `processes`
   df_sensor_ids <- glue::glue(
