@@ -72,7 +72,7 @@ import_generic_observations(con, tz = "UTC")
 import_icos_cities_variables(con)
 }
 \arguments{
-\item{con}{Database connection to an sensors \strong{smonitor} database.}
+\item{con}{Database connection to a ssensors \strong{smonitor} database.}
 
 \item{process}{A vector of processes. If a data frame/tibble is passed 
 containing a variable called \code{process}, this vector will be extracted 
@@ -104,7 +104,7 @@ the \code{valid_only} argument to \code{FALSE}.}
 
 \item{warn}{Should the functions raise warnings?}
 
-\item{tz}{Time-zone for the dates to be parsed into. Default is \code{"UTC"}.}
+\item{tz}{Time zone for the dates to be parsed into. Default is \code{"UTC"}.}
 
 \item{add_extras}{Should extra variables be calculated and returned?}
 }

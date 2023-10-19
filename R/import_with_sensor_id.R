@@ -2,7 +2,7 @@
 #' 
 #' @author Stuart K. Grange
 #' 
-#' @param con Database connection to an sensors \strong{smonitor} database. 
+#' @param con Database connection to a ssensors \strong{smonitor} database. 
 #' 
 #' @param process A vector of processes. If a data frame/tibble is passed 
 #' containing a variable called \code{process}, this vector will be extracted 
@@ -36,7 +36,7 @@
 #' 
 #' @param add_extras Should extra variables be calculated and returned? 
 #' 
-#' @param tz Time-zone for the dates to be parsed into. Default is \code{"UTC"}. 
+#' @param tz Time zone for the dates to be parsed into. Default is \code{"UTC"}. 
 #' 
 #' @return Tibble. 
 #' 
