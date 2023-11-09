@@ -61,8 +61,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   df_sensor_ids <- glue::glue(
     "SELECT processes.process,
     processes.sensor_id,
-    processes.sensing_element_id,
-    sensors.sensor_type
+    processes.sensing_element_id
     FROM processes 
     LEFT JOIN sensors 
     ON processes.sensor_id = sensors.sensor_id
@@ -94,7 +93,6 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
     left_join(df_sensor_ids, by = join_by(process)) %>% 
     relocate(sensor_id,
              sensing_element_id,
-             sensor_type,
              .after = variable)
   
   return(df)
@@ -164,6 +162,7 @@ import_cylinder_deployments <- function(con, tz = "UTC") {
 #' @export
 import_observations_calibrations <- function(con, tz = "UTC") {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "observations_calibrations"))
   
   databaser::db_get(
@@ -236,6 +235,7 @@ import_cylinder_test_summaries <- function(con, tz = "UTC") {
 #' @export
 import_sensor_deployments <- function(con, tz = "UTC") {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "deployments_sensors"))
   
   databaser::db_get(
@@ -296,6 +296,7 @@ import_calibration_coefficients <- function(con, tz = "UTC") {
 #' @export
 import_sensing_elements <- function(con, tz = "UTC") {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "sensing_elements"))
   
   databaser::db_get(
@@ -325,6 +326,7 @@ import_sensing_elements <- function(con, tz = "UTC") {
 #' @export
 import_observation_flags <- function(con) {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "observation_flags"))
   
   databaser::db_get(
@@ -341,6 +343,7 @@ import_observation_flags <- function(con) {
 #' @export
 import_cylinder_exclusion_periods <- function(con, tz = "UTC") {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "cylinder_exclusion_periods"))
   
   databaser::db_get(
@@ -368,7 +371,8 @@ import_sensors <- function(con) {
   databaser::db_get(
     con, 
     "SELECT sensors.*,
-    sensor_types.sensor_group
+    sensor_types.sensor_group,
+    sensor_types.sensor_type_name
     FROM sensors 
     LEFT JOIN sensor_types
     ON sensors.sensor_type = sensor_types.sensor_type
@@ -376,6 +380,7 @@ import_sensors <- function(con) {
   ) %>% 
     relocate(sensor_id,
              sensor_type,
+             sensor_type_name,
              sensor_group)
   
 }
@@ -405,6 +410,7 @@ import_sensor_types <- function(con) {
 #' @export
 import_invalid_date_ranges <- function(con, tz = "UTC") {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "invalidations_date_ranges"))
   
   databaser::db_get(
@@ -424,6 +430,7 @@ import_invalid_date_ranges <- function(con, tz = "UTC") {
 #' @export
 import_validity_types <- function(con) {
   
+  # Check if table exists
   stopifnot(databaser::db_table_exists(con, "validity_types"))
   
   databaser::db_get(
@@ -440,6 +447,9 @@ import_validity_types <- function(con) {
 #' @rdname import_with_sensor_id
 #' @export
 import_model_objects <- function(con, add_extras = TRUE) {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "r_objects"))
   
   # Get blob from database
   df_blob <- databaser::db_get(
