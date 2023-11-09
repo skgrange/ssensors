@@ -52,7 +52,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
   
   # If a data frame has been passed for the progress argument, pull the process
-  # variable if it exists, the naming is not very helpful here! 
+  # variable if it exists, the naming is not very helpful here
   if (is.data.frame(process) & "process" %in% names(process)) {
     process <- pull(process, process)
   }
@@ -61,7 +61,8 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   df_sensor_ids <- glue::glue(
     "SELECT processes.process,
     processes.sensor_id,
-    processes.sensing_element_id
+    processes.sensing_element_id,
+    sensors.sensor_type
     FROM processes 
     LEFT JOIN sensors 
     ON processes.sensor_id = sensors.sensor_id
@@ -93,6 +94,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
     left_join(df_sensor_ids, by = join_by(process)) %>% 
     relocate(sensor_id,
              sensing_element_id,
+             sensor_type,
              .after = variable)
   
   return(df)
@@ -104,6 +106,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
 #' @export
 import_reference_cylinders <- function(con, tz = "UTC") {
   
+  # Check if the table exists
   stopifnot(databaser::db_table_exists(con, "reference_cylinders"))
   
   databaser::db_get(
