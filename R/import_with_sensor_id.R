@@ -424,7 +424,11 @@ import_invalid_date_ranges <- function(con, tz = "UTC") {
     variable,
     date_start"
   ) %>% 
-    mutate(across(c(date_start, date_end), ~threadr::parse_unix_time(., tz = tz)))
+    mutate(
+      across(
+        c(date_start, date_end), ~threadr::parse_unix_time(as.numeric(.), tz = tz)
+      )
+    )
   
 }
 
