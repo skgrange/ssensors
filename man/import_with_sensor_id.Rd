@@ -37,13 +37,13 @@ import_with_sensor_id(
 
 import_reference_cylinders(con, tz = "UTC")
 
-import_cylinder_deployments(con, tz = "UTC")
+import_cylinder_deployments(con, add_extras = TRUE, tz = "UTC")
 
 import_observations_calibrations(con, tz = "UTC")
 
 import_cylinder_test_summaries(con, tz = "UTC")
 
-import_sensor_deployments(con, tz = "UTC")
+import_sensor_deployments(con, add_extras = TRUE, tz = "UTC")
 
 import_calibration_coefficients(con, tz = "UTC")
 

@@ -45,7 +45,8 @@ import_invalidation_tables <- function(con, tz = "UTC") {
       ORDER by sensor_id,
       variable,
       date_start"
-    )
+    ) %>% 
+      mutate(date_end = as.numeric(date_end))
   } else {
     df_date_ranges <- tibble()
   }

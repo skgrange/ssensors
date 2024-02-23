@@ -129,14 +129,14 @@ import_reference_cylinders <- function(con, tz = "UTC") {
 
 #' @rdname import_with_sensor_id
 #' @export
-import_cylinder_deployments <- function(con, tz = "UTC") {
+import_cylinder_deployments <- function(con, add_extras = TRUE, tz = "UTC") {
   
   # Check if the tables exist
   stopifnot(
     databaser::db_table_exists(con, c("deployments_cylinders", "sensors"))
   )
   
-  databaser::db_get(
+  df <- databaser::db_get(
     con,
     "SELECT deployments_cylinders.*,
     sensors.sensor_type
@@ -150,13 +150,20 @@ import_cylinder_deployments <- function(con, tz = "UTC") {
       across(
         c(date_start, date_end), 
         ~threadr::parse_unix_time(as.numeric(.), tz = tz)
-      ),
-      interval = lubridate::interval(date_start, date_end)
+      )
     ) %>% 
     relocate(sensor_id,
-             sensor_type) %>% 
-    relocate(interval,
-             .after = date_end)
+             sensor_type)
+  
+  # Calculate a few extra things
+  if (add_extras) {
+    df <- df %>% 
+      mutate(interval = lubridate::interval(date_start, date_end)) %>% 
+      relocate(interval,
+               .after = date_end)
+  }
+  
+  return(df)
   
 }
 
@@ -236,12 +243,12 @@ import_cylinder_test_summaries <- function(con, tz = "UTC") {
 
 #' @rdname import_with_sensor_id
 #' @export
-import_sensor_deployments <- function(con, tz = "UTC") {
+import_sensor_deployments <- function(con, add_extras = TRUE, tz = "UTC") {
   
   # Check if table exists
   stopifnot(databaser::db_table_exists(con, "deployments_sensors"))
   
-  databaser::db_get(
+  df <- databaser::db_get(
     con, 
     "SELECT deployments_sensors.*,
     sites.site_name,
@@ -258,15 +265,22 @@ import_sensor_deployments <- function(con, tz = "UTC") {
       across(
         c(date_start, date_end),
         ~threadr::parse_unix_time(as.numeric(., tz = tz))
-      ),
-      interval = lubridate::interval(date_start, date_end)
+      )
     ) %>% 
     relocate(sensor_id,
              sensor_type,
              site,
-             site_name) %>% 
-    relocate(interval,
-             .after = date_end)
+             site_name)
+  
+  # Calculate a few extra things
+  if (add_extras) {
+    df <- df %>% 
+      mutate(interval = lubridate::interval(date_start, date_end)) %>% 
+      relocate(interval,
+               .after = date_end)
+  }
+  
+  return(df)
   
 }
 
