@@ -11,9 +11,12 @@ import_meteorological_data_by_site(
   summary = 1L,
   start = 1969,
   end = NA,
-  variables = c("air_temp", "rh", "wd", "ws"),
+  variables = c("air_temp", "rh", "wd", "ws", "global_radiation"),
   valid_only = FALSE,
-  tz = "UTC"
+  set_invalid_values = FALSE,
+  tz = "UTC",
+  verbose = FALSE,
+  progress = FALSE
 )
 }
 \arguments{
@@ -38,7 +41,13 @@ will be ceiling-rounded.}
 
 \item{valid_only}{Should invalid observations be filtered out?}
 
+\item{set_invalid_values}{Should invalid observations be set to \code{NA}?}
+
 \item{tz}{Time-zone for the dates to be parsed into. Default is \code{"UTC"}.}
+
+\item{verbose}{Should the function give messages?}
+
+\item{progress}{Should a progress bar be displayed?}
 }
 \value{
 Tibble.
