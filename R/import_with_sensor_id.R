@@ -428,12 +428,17 @@ import_sensor_types <- function(con) {
 import_invalid_date_ranges <- function(con, tz = "UTC") {
   
   # Check if table exists
-  stopifnot(databaser::db_table_exists(con, "invalidations_date_ranges"))
+  stopifnot(
+    databaser::db_table_exists(con, c("invalidations_date_ranges", "sensors"))
+  )
   
   databaser::db_get(
     con, 
-    "SELECT * 
+    "SELECT invalidations_date_ranges.*,
+    sensors.sensor_type
     FROM invalidations_date_ranges
+    LEFT JOIN sensors
+    ON invalidations_date_ranges.sensor_id = sensors.sensor_id
     ORDER BY sensor_id,
     variable,
     date_start"
@@ -442,7 +447,9 @@ import_invalid_date_ranges <- function(con, tz = "UTC") {
       across(
         c(date_start, date_end), ~threadr::parse_unix_time(as.numeric(.), tz = tz)
       )
-    )
+    ) %>% 
+    relocate(sensor_type,
+             .after = sensor_id)
   
 }
 
