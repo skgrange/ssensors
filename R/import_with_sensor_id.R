@@ -36,7 +36,14 @@
 #' 
 #' @param add_extras Should extra variables be calculated and returned? 
 #' 
+#' @param query_by_process Should observations be queried process by process? 
+#' This will avoid sending large numbers of processes to the database within 
+#' \code{IN} clauses. 
+#' 
 #' @param tz Time zone for the dates to be parsed into. Default is \code{"UTC"}. 
+#' 
+#' @param progress If \code{query_by_process} is \code{TRUE}, should a progress
+#' bar be displayed? 
 #' 
 #' @return Tibble. 
 #' 
@@ -46,7 +53,8 @@
 import_with_sensor_id <- function(con, process, summary = NA, start = 1969, 
                                   end = NA, site_name = TRUE, valid_only = FALSE, 
                                   set_invalid_values = FALSE, warn = FALSE, 
-                                  tz = "UTC") {
+                                  query_by_process = TRUE, tz = "UTC",
+                                  progress = FALSE) {
   
   # Check if the extra ssensors data model tables exist
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
@@ -70,7 +78,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   ) %>% 
     databaser::db_get(con, .)
   
-  # Get observations
+  # Get observations 
   df <- smonitor::import_by_process(
     con, 
     process = process, 
@@ -80,8 +88,10 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
     site_name = site_name,
     valid_only = valid_only,
     set_invalid_values = set_invalid_values,
+    query_by_process = query_by_process,
     warn = warn,
-    tz = tz
+    tz = tz,
+    progress = progress
   )
   
   # If no observations

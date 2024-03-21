@@ -32,7 +32,9 @@ import_with_sensor_id(
   valid_only = FALSE,
   set_invalid_values = FALSE,
   warn = FALSE,
-  tz = "UTC"
+  query_by_process = TRUE,
+  tz = "UTC",
+  progress = FALSE
 )
 
 import_reference_cylinders(con, tz = "UTC")
@@ -104,7 +106,14 @@ the \code{valid_only} argument to \code{FALSE}.}
 
 \item{warn}{Should the functions raise warnings?}
 
+\item{query_by_process}{Should observations be queried process by process? 
+This will avoid sending large numbers of processes to the database within 
+\code{IN} clauses.}
+
 \item{tz}{Time zone for the dates to be parsed into. Default is \code{"UTC"}.}
+
+\item{progress}{If \code{query_by_process} is \code{TRUE}, should a progress
+bar be displayed?}
 
 \item{add_extras}{Should extra variables be calculated and returned?}
 }
