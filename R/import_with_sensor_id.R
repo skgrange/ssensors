@@ -56,14 +56,20 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
                                   query_by_process = TRUE, tz = "UTC",
                                   progress = FALSE) {
   
-  # Check if the extra ssensors data model tables exist
-  stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
-  
   # If a data frame has been passed for the progress argument, pull the process
   # variable if it exists, the naming is not very helpful here
   if (is.data.frame(process) & "process" %in% names(process)) {
     process <- pull(process, process)
   }
+  
+  # If no processes parsed, return an empty tibble
+  if (length(process) == 0L) {
+    cli::cli_warn("No processes passed, no data has been returned...")
+    return(tibble())
+  }
+  
+  # Check if the extra ssensors data model tables exist
+  stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
   
   # Get extra sensor things from `processes`
   df_sensor_ids <- glue::glue(
