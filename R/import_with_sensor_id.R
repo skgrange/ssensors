@@ -626,3 +626,61 @@ import_icos_cities_variables <- function(con) {
   )
   
 }
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_sensors_intercomparison_periods <- function(con, tz = "UTC") {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "sensors_intercomparison_periods"))
+  
+  # Get data with a couple of joins and calculate a few extra things
+  databaser::db_get(
+    con, 
+    "SELECT sensors_intercomparison_periods.*,
+    sensors.sensor_type,
+    sites.site_name
+    FROM sensors_intercomparison_periods
+    LEFT JOIN sensors 
+    ON sensors_intercomparison_periods.sensor_id = sensors.sensor_id
+    LEFT JOIN sites
+    ON sensors_intercomparison_periods.site = sites.site
+    ORDER BY test_id"
+  ) %>% 
+    mutate(
+      exclude = as.logical(exclude),
+      across(c(date_start, date_end), ~threadr::parse_unix_time(., tz = tz)),
+      period = threadr::calculate_time_span(date_start, date_end, "period", round = 0)
+    ) %>% 
+    relocate(sensor_type,
+             .after = sensing_element_id) %>% 
+    relocate(site_name,
+             .after = site) %>% 
+    relocate(period,
+             .after = duration)
+  
+}
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_sensors_humidity_tests <- function(con, tz = "UTC") {
+  
+  # Check if table exists
+  stopifnot(databaser::db_table_exists(con, "sensors_humidity_tests"))
+  
+  # Get data and format some variables
+  databaser::db_get(
+    con, 
+    "SELECT *
+    FROM sensors_humidity_tests
+    ORDER BY test_id,
+    date_start"
+  ) %>% 
+    mutate(
+      across(c(exclude, flush), as.logical),
+      across(c(date_start, date_end), ~threadr::parse_unix_time(., tz = tz))
+    )
+  
+}

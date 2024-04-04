@@ -20,6 +20,8 @@
 \alias{import_observation_flagging_conditions}
 \alias{import_generic_observations}
 \alias{import_icos_cities_variables}
+\alias{import_sensors_intercomparison_periods}
+\alias{import_sensors_humidity_tests}
 \title{Functions to import data from an extended sensors \strong{smonitor} database.}
 \usage{
 import_with_sensor_id(
@@ -72,6 +74,10 @@ import_observation_flagging_conditions(con)
 import_generic_observations(con, tz = "UTC")
 
 import_icos_cities_variables(con)
+
+import_sensors_intercomparison_periods(con, tz = "UTC")
+
+import_sensors_humidity_tests(con, tz = "UTC")
 }
 \arguments{
 \item{con}{Database connection to a ssensors \strong{smonitor} database.}
