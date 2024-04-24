@@ -3,6 +3,7 @@
 \name{import_with_sensor_id}
 \alias{import_with_sensor_id}
 \alias{import_reference_cylinders}
+\alias{import_reference_gases}
 \alias{import_cylinder_deployments}
 \alias{import_observations_calibrations}
 \alias{import_cylinder_test_summaries}
@@ -40,6 +41,8 @@ import_with_sensor_id(
 )
 
 import_reference_cylinders(con, tz = "UTC")
+
+import_reference_gases(con, tz = "UTC")
 
 import_cylinder_deployments(con, add_extras = TRUE, tz = "UTC")
 
