@@ -24,7 +24,7 @@ import_invalidation_tables <- function(con, tz = "UTC") {
       processes.site,
       processes.variable,
       processes.sensor_id,
-      'invalidations' AS 'table'
+      'invalidations' AS table
       FROM invalidations
       LEFT JOIN processes 
       ON invalidations.process = processes.process
@@ -40,7 +40,7 @@ import_invalidation_tables <- function(con, tz = "UTC") {
     df_date_ranges <- databaser::db_get(
       con,
       "SELECT *,
-      'invalidations_date_ranges' AS 'table'
+      'invalidations_date_ranges' AS table
       FROM invalidations_date_ranges
       ORDER by sensor_id,
       variable,
