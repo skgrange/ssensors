@@ -72,7 +72,7 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
   stopifnot(databaser::db_table_exists(con, c("processes", "sensors")))
   
   # Get extra sensor things from `processes`
-  df_sensor_ids <- glue::glue(
+  df_sensor_ids <- stringr::str_glue(
     "SELECT processes.process,
     processes.sensor_id,
     processes.sensing_element_id,
@@ -707,5 +707,58 @@ import_sensors_humidity_tests <- function(con, tz = "UTC") {
       across(c(exclude, flush), as.logical),
       across(c(date_start, date_end), ~threadr::parse_unix_time(., tz = tz))
     )
+  
+}
+
+
+#' @rdname import_with_sensor_id
+#' @export
+import_sensors_gases <- function(con) {
+  
+  # Get reference gases
+  df_gases <- import_reference_gases(con) %>% 
+    filter(variable == "co2") %>% 
+    mutate(
+      fill_sequence_pad = stringr::str_pad(fill_sequence, width = 2, pad = "0"),
+      cylinder_group = stringr::str_c(cylinder_id, ":", fill_sequence_pad)
+    ) %>% 
+    select(cylinder_id,
+           fill_sequence,
+           cylinder_group,
+           date_analysed,
+           date_start_range = date_start,
+           date_end_range = date_end,
+           variable,
+           value)
+  
+  # Get cylinder deployments
+  df_deployments <- import_cylinder_deployments(con, add_extras = FALSE) %>% 
+    select(-notes) %>% 
+    mutate(
+      date_end = if_else(
+        date_end == lubridate::ymd("2100-01-01", tz = "UTC"), 
+        lubridate::today(), 
+        date_end
+      )
+    ) %>% 
+    tidyr::pivot_longer(
+      -c(sensor_id:inlet), names_to = "date_type", values_to = "date"
+    ) %>% 
+    select(-date_type) 
+  
+  # Pad to a daily time series and join gas information
+  df_join <- df_deployments %>% 
+    threadr::time_pad(
+      "day", by = c("sensor_id", "sensor_type", "cylinder_id", "inlet")
+    ) %>% 
+    left_join(
+      df_gases,
+      by = join_by(
+        cylinder_id == cylinder_id,
+        between(date, date_start_range, date_end_range)
+      )
+    )
+  
+  return(df_join)
   
 }
