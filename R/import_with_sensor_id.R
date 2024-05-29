@@ -521,17 +521,19 @@ import_model_objects <- function(con, add_extras = TRUE) {
   stopifnot(databaser::db_table_exists(con, "r_objects"))
   
   # Get blob from database
-  df_blob <- databaser::db_get(
+  df_blobs <- databaser::db_get(
     con, 
     "SELECT blob 
     FROM r_objects 
     WHERE file = 'model_objects'"
   )
   
-  # Decompress blob and make an R object again
-  df_nest <- df_blob$blob[[1]] %>% 
-    memDecompress(type = "gzip") %>% 
-    unserialize()
+  # Decompress blobs and make an R objects again
+  df_nest <- df_blobs %>% 
+    pull(blob) %>% 
+    purrr::map(~memDecompress(., type = "gzip")) %>% 
+    purrr::map(unserialize) %>% 
+    purrr::list_rbind()
   
   # Format a few things
   df_nest <- df_nest %>% 
