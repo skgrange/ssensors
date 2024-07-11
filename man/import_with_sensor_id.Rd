@@ -2,7 +2,6 @@
 % Please edit documentation in R/import_with_sensor_id.R
 \name{import_with_sensor_id}
 \alias{import_with_sensor_id}
-\alias{import_reference_cylinders}
 \alias{import_reference_gases}
 \alias{import_cylinder_deployments}
 \alias{import_observations_calibrations}
@@ -40,8 +39,6 @@ import_with_sensor_id(
   tz = "UTC",
   progress = FALSE
 )
-
-import_reference_cylinders(con, tz = "UTC")
 
 import_reference_gases(con, tz = "UTC")
 

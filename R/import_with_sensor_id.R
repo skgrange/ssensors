@@ -120,31 +120,6 @@ import_with_sensor_id <- function(con, process, summary = NA, start = 1969,
 
 #' @rdname import_with_sensor_id
 #' @export
-import_reference_cylinders <- function(con, tz = "UTC") {
-  
-  # Check if the table exists
-  stopifnot(databaser::db_table_exists(con, "reference_cylinders"))
-  
-  databaser::db_get(
-    con, 
-    "SELECT * 
-    FROM reference_cylinders
-    ORDER BY cylinder_id,
-    statistic,
-    date_analysed"
-  ) %>% 
-    mutate(
-      across(
-        c(date_analysed, date_start, date_end), 
-        ~threadr::parse_unix_time(as.numeric(.), tz = tz)
-      )
-    )
-  
-}
-
-
-#' @rdname import_with_sensor_id
-#' @export
 import_reference_gases <- function(con, tz = "UTC") {
   
   # Check if the table exists
